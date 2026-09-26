@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, Suspense, lazy } from 'react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Analytics } from '@vercel/analytics/react'
 import Hero from './components/Hero'
 import ZeroWaitSection from './components/ZeroWaitSection'
 import JourneySection from './components/JourneySection'
@@ -237,6 +238,9 @@ export default function App() {
 
         {/* Cuberto-Inspired Global Mouse Interaction Layer */}
         <MouseTracker />
+
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </div>
     </SmoothScroll>
   )
