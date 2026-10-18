@@ -19,6 +19,7 @@ const FAQSection = lazy(() => import('./components/FAQSection'))
 const CTAEnrollmentSection = lazy(() => import('./components/CTAEnrollmentSection'))
 const TermsPage = lazy(() => import('./pages/TermsPage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const DeleteAccountPage = lazy(() => import('./pages/DeleteAccountPage'))
 
 const isTermsRoute = () => {
   if (typeof window === 'undefined') return false
@@ -54,8 +55,25 @@ const isPrivacyRoute = () => {
   )
 }
 
+const isDeleteAccountRoute = () => {
+  if (typeof window === 'undefined') return false
+  const hash = window.location.hash.toLowerCase()
+  const path = window.location.pathname.toLowerCase()
+  const search = window.location.search.toLowerCase()
+  return (
+    hash === '#delete-account' ||
+    hash.startsWith('#/delete-account') ||
+    hash.startsWith('#delete-account') ||
+    path === '/delete-account' ||
+    path.startsWith('/delete-account') ||
+    path.endsWith('/delete-account') ||
+    search.includes('delete-account')
+  )
+}
+
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
+    if (isDeleteAccountRoute()) return 'delete-account'
     if (isTermsRoute()) return 'terms'
     if (isPrivacyRoute()) return 'privacy'
     return 'home'
@@ -66,7 +84,9 @@ export default function App() {
   // Listen to browser forward/back & hash changes
   useEffect(() => {
     const handleLocationChange = () => {
-      if (isTermsRoute()) {
+      if (isDeleteAccountRoute()) {
+        setCurrentPage('delete-account')
+      } else if (isTermsRoute()) {
         setCurrentPage('terms')
       } else if (isPrivacyRoute()) {
         setCurrentPage('privacy')
@@ -117,7 +137,10 @@ export default function App() {
       document.head.appendChild(canonical)
     }
 
-    if (currentPage === 'terms') {
+    if (currentPage === 'delete-account') {
+      document.title = 'Account & Data Deletion — AarohCare'
+      canonical.setAttribute('href', 'https://aarohcare.com/delete-account')
+    } else if (currentPage === 'terms') {
       document.title = 'Terms & Conditions — AarohCare'
       canonical.setAttribute('href', 'https://aarohcare.com/terms')
     } else if (currentPage === 'privacy') {
@@ -130,7 +153,12 @@ export default function App() {
   }, [currentPage])
 
   const navigateTo = (page, hashTarget) => {
-    if (page === 'terms') {
+    if (page === 'delete-account') {
+      if (window.location.hash !== '#delete-account') {
+        window.location.hash = 'delete-account'
+      }
+      setCurrentPage('delete-account')
+    } else if (page === 'terms') {
       if (window.location.hash !== '#terms') {
         window.location.hash = 'terms'
       }
@@ -144,7 +172,7 @@ export default function App() {
       if (hashTarget && hashTarget.startsWith('#') && hashTarget !== '#hero') {
         window.location.hash = hashTarget
       } else {
-        if (window.location.hash.includes('terms') || window.location.hash.includes('privacy')) {
+        if (window.location.hash.includes('terms') || window.location.hash.includes('privacy') || window.location.hash.includes('delete-account')) {
           history.pushState(null, '', window.location.pathname)
         }
       }
@@ -164,7 +192,14 @@ export default function App() {
   return (
     <SmoothScroll>
       <div className="min-h-screen bg-white w-full">
-        {currentPage === 'terms' ? (
+        {currentPage === 'delete-account' ? (
+          <Suspense fallback={<div className="min-h-screen bg-[#f8fafc]" />}>
+            <DeleteAccountPage
+              onNavigateHome={(hash) => navigateTo('home', hash)}
+              onNavigatePage={navigateTo}
+            />
+          </Suspense>
+        ) : currentPage === 'terms' ? (
           <Suspense fallback={<div className="min-h-screen bg-[#f8fafc]" />}>
             <TermsPage
               onNavigateHome={(hash) => navigateTo('home', hash)}

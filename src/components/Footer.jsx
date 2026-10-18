@@ -53,9 +53,18 @@ export default function Footer({ onNavigate }) {
   const legalLinks = [
     { name: 'Privacy Policy', href: '#privacy' },
     { name: 'Terms & Conditions', href: '#terms' },
+    { name: 'Delete Account', href: '#delete-account' },
   ]
 
   const handleLinkClick = (e, href) => {
+    if (href === '#delete-account' || href === '/delete-account' || href.includes('delete-account')) {
+      e.preventDefault()
+      if (onNavigate) {
+        onNavigate('delete-account')
+      }
+      return
+    }
+
     if (href === '#terms' || href === '/terms' || href.includes('terms') || href === '#terms-and-conditions') {
       e.preventDefault()
       if (onNavigate) {
