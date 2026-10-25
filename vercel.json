@@ -1,5 +1,12 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/chat/:phone(\\d{10,15})",
+      "destination": "https://wa.me/:phone",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/delete-account",
