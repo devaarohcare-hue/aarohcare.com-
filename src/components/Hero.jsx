@@ -85,8 +85,8 @@ export default function Hero({ videoSrc = '/hero-bg.mp4' }) {
             by="word"
             className="text-5xl sm:text-7xl lg:text-[5.75rem] font-bold tracking-tight leading-[1.04] text-white drop-shadow-md"
           >
-            Our Health, <br />
-            Our Time.
+            Our Time, <br />
+            Our Health.
           </TextAnimate>
         </div>
 
