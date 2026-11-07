@@ -20,6 +20,13 @@ const CTAEnrollmentSection = lazy(() => import('./components/CTAEnrollmentSectio
 const TermsPage = lazy(() => import('./pages/TermsPage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const DeleteAccountPage = lazy(() => import('./pages/DeleteAccountPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+
+const isHomeRoute = () => {
+  if (typeof window === 'undefined') return true
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, '') || '/'
+  return path === '/'
+}
 
 const isTermsRoute = () => {
   if (typeof window === 'undefined') return false
@@ -76,7 +83,8 @@ export default function App() {
     if (isDeleteAccountRoute()) return 'delete-account'
     if (isTermsRoute()) return 'terms'
     if (isPrivacyRoute()) return 'privacy'
-    return 'home'
+    if (isHomeRoute()) return 'home'
+    return 'not-found'
   })
   const navTimeoutRef = useRef(null)
   const pageChangeTimeoutRef = useRef(null)
@@ -90,8 +98,10 @@ export default function App() {
         setCurrentPage('terms')
       } else if (isPrivacyRoute()) {
         setCurrentPage('privacy')
-      } else {
+      } else if (isHomeRoute()) {
         setCurrentPage('home')
+      } else {
+        setCurrentPage('not-found')
       }
     }
 
@@ -139,21 +149,26 @@ export default function App() {
 
     if (currentPage === 'delete-account') {
       document.title = 'Account & Data Deletion — AarohCare'
-      canonical.setAttribute('href', 'https://aarohcare.com/delete-account')
+      canonical.setAttribute('href', 'https://www.aarohcare.com/delete-account')
     } else if (currentPage === 'terms') {
       document.title = 'Terms & Conditions — AarohCare'
-      canonical.setAttribute('href', 'https://aarohcare.com/terms')
+      canonical.setAttribute('href', 'https://www.aarohcare.com/terms')
     } else if (currentPage === 'privacy') {
       document.title = 'Privacy Policy — AarohCare'
-      canonical.setAttribute('href', 'https://aarohcare.com/privacy')
+      canonical.setAttribute('href', 'https://www.aarohcare.com/privacy')
+    } else if (currentPage === 'not-found') {
+      document.title = '404 - Page Not Found — AarohCare'
+      canonical.setAttribute('href', 'https://www.aarohcare.com/404')
     } else {
       document.title = 'AarohCare — Our Health, Our Time'
-      canonical.setAttribute('href', 'https://aarohcare.com/')
+      canonical.setAttribute('href', 'https://www.aarohcare.com/')
     }
   }, [currentPage])
 
   const navigateTo = (page, hashTarget) => {
-    if (page === 'delete-account') {
+    if (page === 'not-found') {
+      setCurrentPage('not-found')
+    } else if (page === 'delete-account') {
       if (window.location.hash !== '#delete-account') {
         window.location.hash = 'delete-account'
       }
@@ -192,7 +207,14 @@ export default function App() {
   return (
     <SmoothScroll>
       <div className="min-h-screen bg-white w-full">
-        {currentPage === 'delete-account' ? (
+        {currentPage === 'not-found' ? (
+          <Suspense fallback={<div className="min-h-screen bg-[#f8fafc]" />}>
+            <NotFoundPage
+              onNavigateHome={(hash) => navigateTo('home', hash)}
+              onNavigatePage={navigateTo}
+            />
+          </Suspense>
+        ) : currentPage === 'delete-account' ? (
           <Suspense fallback={<div className="min-h-screen bg-[#f8fafc]" />}>
             <DeleteAccountPage
               onNavigateHome={(hash) => navigateTo('home', hash)}

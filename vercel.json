@@ -1,9 +1,39 @@
 {
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/api/homepage-markdown"
+    },
     {
       "source": "/chat/:path*",
       "destination": "/api/chat?path=:path*"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
     },
     {
       "source": "/delete-account",
@@ -26,8 +56,16 @@
       "destination": "/privacy.html"
     },
     {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/terms-and-conditions",
+      "destination": "/terms.html"
+    },
+    {
       "source": "/((?!api/).*)",
-      "destination": "/"
+      "destination": "/api/not-found"
     }
   ]
 }

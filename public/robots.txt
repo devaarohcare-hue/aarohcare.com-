@@ -13,4 +13,4 @@ Allow: /*.jpg
 Allow: /*.webp
 Allow: /*.ico
 
-Sitemap: https://aarohcare.com/sitemap.xml
+Sitemap: https://www.aarohcare.com/sitemap.xml
