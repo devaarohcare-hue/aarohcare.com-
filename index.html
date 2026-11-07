@@ -111,87 +111,99 @@
         }
       ]
     }
-    </script>
+  </script>
+
+  <style>
+    /* Prevent flash of fallback content for visitors with JavaScript enabled */
+    html.js #fallback-content {
+      display: none !important;
+    }
+  </style>
+  <script>
+    document.documentElement.classList.add('js');
+  </script>
 </head>
 
 <body class="bg-white text-slate-900 antialiased font-['Plus_Jakarta_Sans',sans-serif]">
   <div id="root">
-    <header>
-      <nav aria-label="Main Navigation">
-        <a href="/">AarohCare</a>
-        <a href="/#zero-wait">Zero Wait</a>
-        <a href="/#journey">Journey</a>
-        <a href="/#clinic-management">Clinic Management</a>
-        <a href="/#lab-features">Diagnostic Labs</a>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/delete-account">Delete Account</a>
-      </nav>
-    </header>
+    <div id="fallback-content">
+      <header>
+        <nav aria-label="Main Navigation">
+          <a href="/">AarohCare</a>
+          <a href="/#zero-wait">Zero Wait</a>
+          <a href="/#journey">Journey</a>
+          <a href="/#clinic-management">Clinic Management</a>
+          <a href="/#lab-features">Diagnostic Labs</a>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/delete-account">Delete Account</a>
+        </nav>
+      </header>
 
-    <main>
-      <h1>AarohCare — Our Health, Our Time: Smart Healthcare &amp; Clinic OP Management</h1>
-      <p>
-        AarohCare streamlines hospital and clinic outpatient (OP) management with smart doctor appointment booking in
-        under 30 seconds, real-time live token tracking, and zero wait times. Operated by AarohCare Technologies Pvt
-        Ltd, our digital health platform connects patients, clinics, hospitals, and diagnostic laboratories into an
-        integrated, efficient healthcare network.
-      </p>
-
-      <section>
-        <h2>Zero Wait Outpatient (OP) Experience</h2>
+      <main>
+        <h1>AarohCare — Our Health, Our Time: Smart Healthcare &amp; Clinic OP Management</h1>
         <p>
-          Traditional clinic visits often mean hours sitting in crowded waiting rooms without knowing when the doctor
-          will call your name. AarohCare replaces static waiting with live queue telemetry. Patients book an OP token in
-          seconds from their phone, track their position in line in real time, and arrive at the clinic precisely when
-          it is their turn to be seen.
+          AarohCare streamlines hospital and clinic outpatient (OP) management with smart doctor appointment booking in
+          under 30 seconds, real-time live token tracking, and zero wait times. Operated by AarohCare Technologies Pvt
+          Ltd, our digital health platform connects patients, clinics, hospitals, and diagnostic laboratories into an
+          integrated, efficient healthcare network.
         </p>
-      </section>
 
-      <section>
-        <h2>Comprehensive Clinic &amp; Hospital Operations Software</h2>
-        <p>
-          Designed hand-in-hand with leading doctors and practice managers, AarohCare's clinic operations suite empowers
-          medical centers with intelligent scheduling, dynamic doctor availability management, multi-counter queue
-          coordination, and automated patient notifications via approved WhatsApp channels. Clinics reduce desk
-          congestion, eliminate missed appointments, and enhance clinical workflow efficiency.
-        </p>
-      </section>
+        <section>
+          <h2>Zero Wait Outpatient (OP) Experience</h2>
+          <p>
+            Traditional clinic visits often mean hours sitting in crowded waiting rooms without knowing when the doctor
+            will call your name. AarohCare replaces static waiting with live queue telemetry. Patients book an OP token in
+            seconds from their phone, track their position in line in real time, and arrive at the clinic precisely when
+            it is their turn to be seen.
+          </p>
+        </section>
 
-      <section>
-        <h2>Diagnostic Lab Records &amp; Live Telemetry</h2>
-        <p>
-          AarohCare connects patients directly with diagnostic laboratories. Clinical reports, blood work, and imaging
-          investigations are delivered digitally to patients via WhatsApp and secured in longitudinal health records,
-          eliminating paper clutter and facilitating rapid doctor reviews during follow-up consultations.
-        </p>
-      </section>
+        <section>
+          <h2>Comprehensive Clinic &amp; Hospital Operations Software</h2>
+          <p>
+            Designed hand-in-hand with leading doctors and practice managers, AarohCare's clinic operations suite empowers
+            medical centers with intelligent scheduling, dynamic doctor availability management, multi-counter queue
+            coordination, and automated patient notifications via approved WhatsApp channels. Clinics reduce desk
+            congestion, eliminate missed appointments, and enhance clinical workflow efficiency.
+          </p>
+        </section>
 
-      <section>
-        <h2>About AarohCare Technologies Pvt Ltd</h2>
-        <p>
-          Founded by Amal Hisham K (CEO), Muhammed Aslam (COO), and Kiran VK (CMO), AarohCare Technologies is committed
-          to transforming outpatient care delivery across India with modern healthcare software, patient-centric design,
-          and real-time operational telemetry.
-        </p>
-        <h3>Platform Features &amp; Important Links</h3>
-        <ul>
-          <li><a href="/#zero-wait">Zero Wait Appointments</a> — Book OP tokens in under 30 seconds.</li>
-          <li><a href="/#journey">Patient Journey</a> — Four simple steps from discovery to consultation.</li>
-          <li><a href="/#clinic-management">Clinic Operations</a> — Counter management, live tokens, and analytics.</li>
-          <li><a href="/#lab-features">Diagnostic Labs</a> — Automated WhatsApp report dispatch and records.</li>
-          <li><a href="/terms">Terms and Conditions</a> — User agreements and platform policies.</li>
-          <li><a href="/privacy">Privacy Policy</a> — Data protection and patient confidentiality.</li>
-          <li><a href="/delete-account">Account Deletion</a> — User account and data deletion requests.</li>
-          <li><a href="/sitemap.xml">XML Sitemap</a> — Complete machine-readable site index.</li>
-        </ul>
-      </section>
-    </main>
+        <section>
+          <h2>Diagnostic Lab Records &amp; Live Telemetry</h2>
+          <p>
+            AarohCare connects patients directly with diagnostic laboratories. Clinical reports, blood work, and imaging
+            investigations are delivered digitally to patients via WhatsApp and secured in longitudinal health records,
+            eliminating paper clutter and facilitating rapid doctor reviews during follow-up consultations.
+          </p>
+        </section>
 
-    <footer>
-      <p>&copy; 2026 AarohCare Technologies Pvt Ltd. All rights reserved. Support: aarohcare.in@gmail.com | Phone: +91
-        6282829412 | Kerala, India.</p>
-    </footer>
+        <section>
+          <h2>About AarohCare Technologies Pvt Ltd</h2>
+          <p>
+            Founded by Amal Hisham K (CEO), Muhammed Aslam (COO), and Kiran VK (CMO), AarohCare Technologies is committed
+            to transforming outpatient care delivery across India with modern healthcare software, patient-centric design,
+            and real-time operational telemetry.
+          </p>
+          <h3>Platform Features &amp; Important Links</h3>
+          <ul>
+            <li><a href="/#zero-wait">Zero Wait Appointments</a> — Book OP tokens in under 30 seconds.</li>
+            <li><a href="/#journey">Patient Journey</a> — Four simple steps from discovery to consultation.</li>
+            <li><a href="/#clinic-management">Clinic Operations</a> — Counter management, live tokens, and analytics.</li>
+            <li><a href="/#lab-features">Diagnostic Labs</a> — Automated WhatsApp report dispatch and records.</li>
+            <li><a href="/terms">Terms and Conditions</a> — User agreements and platform policies.</li>
+            <li><a href="/privacy">Privacy Policy</a> — Data protection and patient confidentiality.</li>
+            <li><a href="/delete-account">Account Deletion</a> — User account and data deletion requests.</li>
+            <li><a href="/sitemap.xml">XML Sitemap</a> — Complete machine-readable site index.</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2026 AarohCare Technologies Pvt Ltd. All rights reserved. Support: aarohcare.in@gmail.com | Phone: +91
+          6282829412 | Kerala, India.</p>
+      </footer>
+    </div>
   </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
