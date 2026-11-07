@@ -1,22 +1,21 @@
 // Vercel Serverless Function & Dev Server Handler for 404 Not Found
-// Supports agent-friendly Markdown responses (Accept: text/markdown) and branded HTML
+// Supports agent-friendly Markdown responses (Accept: text/markdown) and 100% self-contained branded HTML
 
 const MARKDOWN_BODY = `# 404 Not Found — AarohCare
 
-The requested resource could not be found on AarohCare (https://www.aarohcare.com/).
+Looks like this page missed its appointment.
 
-The URL you requested may have been moved, deleted, or does not exist.
+The page you're looking for doesn't exist or may have moved on AarohCare (https://www.aarohcare.com/).
 
 ### Helpful Resources
 
 - **Homepage**: [https://www.aarohcare.com/](https://www.aarohcare.com/)
-- **Sitemap**: [https://www.aarohcare.com/sitemap.xml](https://www.aarohcare.com/sitemap.xml)
-- **LLM / Agent Index**: [https://www.aarohcare.com/llms.txt](https://www.aarohcare.com/llms.txt)
 - **Terms & Conditions**: [https://www.aarohcare.com/terms](https://www.aarohcare.com/terms)
 - **Privacy Policy**: [https://www.aarohcare.com/privacy](https://www.aarohcare.com/privacy)
-- **Account Deletion**: [https://www.aarohcare.com/delete-account](https://www.aarohcare.com/delete-account)
+- **Sitemap**: [https://www.aarohcare.com/sitemap.xml](https://www.aarohcare.com/sitemap.xml)
+- **LLM / Agent Index**: [https://www.aarohcare.com/llms.txt](https://www.aarohcare.com/llms.txt)
 
-For additional inquiries or support, please visit our homepage or contact us at aarohcare.in@gmail.com.
+For support, please contact us at aarohcare.in@gmail.com.
 `
 
 const HTML_BODY = `<!doctype html>
@@ -25,78 +24,318 @@ const HTML_BODY = `<!doctype html>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>404 - Page Not Found — AarohCare</title>
-    <meta name="description" content="The page you are looking for does not exist on AarohCare." />
+    <meta name="description" content="The page you're looking for doesn't exist or may have moved on AarohCare." />
     <meta name="robots" content="noindex, follow" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-      body { font-family: 'Plus Jakarta Sans', sans-serif; }
-      h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f8fafc;
+        color: #0f172a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .navbar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand img {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        object-fit: contain;
+      }
+      .brand-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+      }
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .nav-btn:hover {
+        background-color: #e2e8f0;
+        color: #1d4ed8;
+      }
+      .main-content {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 64px 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        justify-content: center;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 9999px;
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background-color: #2563eb;
+      }
+      .error-code {
+        font-size: 80px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: #0f172a;
+        margin-top: 16px;
+      }
+      .headline {
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 1.25;
+        color: #0f172a;
+        margin-top: 16px;
+        letter-spacing: -0.02em;
+      }
+      .description {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #475569;
+        margin-top: 12px;
+        max-width: 480px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background-color: #2563eb;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+      }
+      .btn-primary:hover {
+        background-color: #1d4ed8;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      }
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 22px;
+        background-color: #ffffff;
+        color: #334155;
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        transition: all 0.2s ease;
+      }
+      .btn-secondary:hover {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+        color: #0f172a;
+      }
+      .nav-links {
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+        width: 100%;
+        max-width: 440px;
+      }
+      .nav-links-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+        margin-bottom: 12px;
+      }
+      .nav-links-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #475569;
+      }
+      .nav-links-list a:hover {
+        color: #2563eb;
+      }
+      .divider {
+        color: #cbd5e1;
+      }
+      .footer {
+        border-top: 1px solid #e2e8f0;
+        background-color: #ffffff;
+        padding: 20px 24px;
+        text-align: center;
+        font-size: 13px;
+        color: #64748b;
+      }
+      .icon {
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        min-height: 16px;
+        max-width: 16px;
+        max-height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      @media (max-width: 640px) {
+        .error-code {
+          font-size: 60px;
+        }
+        .headline {
+          font-size: 24px;
+        }
+        .description {
+          font-size: 14px;
+        }
+        .actions {
+          flex-direction: column;
+          width: 100%;
+        }
+        .btn-primary, .btn-secondary {
+          width: 100%;
+        }
+      }
     </style>
   </head>
-  <body class="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between antialiased">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2.5">
-          <img src="/aarohcare-logo.png" alt="AarohCare Logo" class="w-9 h-9 rounded-lg object-contain" />
-          <div>
-            <span class="text-lg font-bold tracking-tight text-slate-900 block leading-tight">AarohCare</span>
-            <span class="text-[10px] font-medium text-slate-500 block leading-none">Smart Healthcare</span>
-          </div>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="navbar-inner">
+        <a href="/" class="brand">
+          <img src="/favicon.ico" alt="AarohCare logo" width="34" height="34" />
+          <span class="brand-name">AarohCare</span>
         </a>
-        <nav class="flex items-center gap-4">
-          <a href="/" class="text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors">Home</a>
-          <a href="/terms" class="text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors hidden sm:inline-block">Terms</a>
-          <a href="/privacy" class="text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors hidden sm:inline-block">Privacy</a>
-          <a href="mailto:aarohcare.in@gmail.com" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-all">
-            Contact Support
-          </a>
-        </nav>
+        <a href="/" class="nav-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Homepage</span>
+        </a>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 w-full flex-1 flex flex-col items-center justify-center text-center">
-      <span class="px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold tracking-wide uppercase">
-        Error 404
-      </span>
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mt-4">
-        Page Not Found
-      </h1>
-      <p class="text-slate-600 mt-3 text-base sm:text-lg max-w-lg">
-        Sorry, the page or resource you are looking for does not exist or may have been relocated.
+    <main class="main-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Error 404</span>
+      </div>
+
+      <p class="error-code">404</p>
+
+      <h1 class="headline">Looks like this page missed its appointment.</h1>
+
+      <p class="description">
+        The page you're looking for doesn't exist or may have moved. Let's help you find your way back.
       </p>
 
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <a href="/" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all">
-          Return to Homepage
+      <div class="actions">
+        <a href="/" class="btn-primary">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Back to Homepage</span>
         </a>
-        <a href="/sitemap.xml" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-xs transition-all">
-          View Sitemap
+
+        <a href="mailto:aarohcare.in@gmail.com?subject=Inquiry%20from%20404%20Page" class="btn-secondary">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <span>Contact Support</span>
         </a>
       </div>
 
-      <div class="mt-12 pt-8 border-t border-slate-200 w-full max-w-md text-xs text-slate-500">
-        <p>Looking for legal policies?</p>
-        <div class="mt-2 flex items-center justify-center gap-4 text-blue-600 font-medium">
-          <a href="/terms" class="hover:underline">Terms of Service</a>
-          <span>•</span>
-          <a href="/privacy" class="hover:underline">Privacy Policy</a>
-          <span>•</span>
-          <a href="/delete-account" class="hover:underline">Account Deletion</a>
+      <nav class="nav-links" aria-label="Additional Navigation">
+        <p class="nav-links-title">Helpful Resources</p>
+        <div class="nav-links-list">
+          <a href="/terms">Terms &amp; Conditions</a>
+          <span class="divider">•</span>
+          <a href="/privacy">Privacy Policy</a>
+          <span class="divider">•</span>
+          <a href="/sitemap.xml">Sitemap</a>
         </div>
-      </div>
+      </nav>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-white py-6">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-500">
-        &copy; 2026 AarohCare Technologies Pvt Ltd. All rights reserved.
-      </div>
+    <footer class="footer">
+      &copy; 2026 AarohCare Technologies Pvt Ltd. All rights reserved.
     </footer>
   </body>
 </html>
@@ -119,4 +358,3 @@ export default function handler(req, res) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.end(HTML_BODY)
 }
-
