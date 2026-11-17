@@ -65,7 +65,7 @@
     },
     {
       "source": "/op/:code",
-      "destination": "/op.html"
+      "destination": "/op"
     },
     {
       "source": "/((?!api/).*)",
