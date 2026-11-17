@@ -64,6 +64,10 @@
       "destination": "/terms.html"
     },
     {
+      "source": "/op/:code",
+      "destination": "/op.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/api/not-found"
     }
